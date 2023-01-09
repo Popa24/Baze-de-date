@@ -93,7 +93,7 @@ function PersoanaComponent() {
     async function getAllNrExemplare() {
         try {
             const response = await axios.get('http://localhost:8080/persoana/nerestituite2');
-            setpersoana(response.data.map(p => new Persoana3(p[0], p[1], p[2], p[3], p[4],p[5],p[6],p[7],p[8],p[9])));
+            setpersoana(response.data.map(p => new Persoana3(p[0].id_pers, p[0].nume, p[0].telefon, p[0].adresa,p[0].data_nasterii, p[1].id_carte,p[1].titlu,p[1].nr_pagini,p[1].nr_exemplare,p[1].gen)));
             setpersoana1(["Id Persoana","Nume","Telefon","Adresa","Data Nasterii","ID","Titlu","Numar pagini","Numar exemplare","gen"])
             console.log(persoana);
         } catch (error) {
@@ -131,7 +131,7 @@ function PersoanaComponent() {
         switch (search){
             case "4a": return   getAllCopii();
             case "6a": return   getAllIntarziere();
-            // case "5b": return  getAllNrExemplare();
+            case "5b": return  getAllNrExemplare();
             default : return getPersoane();
         }
     }
@@ -153,7 +153,7 @@ function PersoanaComponent() {
 
             <thead>
             <tr>
-                <th colSpan={6} id="numetabel"> Tabel Persoane</th>
+                <th colSpan={10} id="numetabel"> Tabel Persoane</th>
             </tr><tr className="persoana-table_green">
                 { persoana1.map((header) => <td  >{header}</td>)}</tr>
             </thead>
@@ -162,8 +162,14 @@ function PersoanaComponent() {
                 persoana.map(
                     persoana=>{
                         console.log("persoana ",persoana);
+                        if(persoana instanceof Persoana){
+                            return createPersoanaRow(persoana);
+                        } else if(persoana instanceof Persoana2){
+                            return  createPersoanaHeader2(persoana);
+                        }else if(persoana instanceof Persoana3){
+                            return createPersoanaHeader3(persoana);
+                        }
 
-                        return persoana instanceof Persoana? createPersoanaRow(persoana):createPersoanaHeader2(persoana);
                     }
                 )
 
